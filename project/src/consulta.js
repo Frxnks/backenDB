@@ -1,21 +1,6 @@
 import db from "./db.js";
 
-// let a
-
-// function consultas(consulta) {
-
-//   db.all(consulta, (err, rows) => {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       console.log(rows);
-//       return rows;
-//     }
-//   });
-
-// }
-
-function consultas(consulta) {
+export function consultas(consulta) {
   return new Promise((resolve, reject) => {
     db.all(consulta, (err, rows) => {
       if (err) {
@@ -27,13 +12,16 @@ function consultas(consulta) {
     });
   });
 }
-// consultas("SELECT * FROM usuario")
-//   .then((rows) => {
-//     a = rows;
-//     console.log("Valores asignados a 'a':", a);
-//   })
-//   .catch((err) => {
-//     console.error("Error en la consulta:", err);
-//   });
 
-export default consultas;
+export function modificar(consulta) {
+  return new Promise((resolve, reject) => {
+    db.run(consulta, function (err) {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve({ id: this.lastID, changes: this.changes });
+      }
+    });
+  });
+}
